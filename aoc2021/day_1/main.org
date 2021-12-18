@@ -54,3 +54,48 @@ return df.gt(df.shift(1)).sum()
 #+RESULTS:
 : depth    1475
 : dtype: int64
+
+
+* Part 2
+** Example
+
+#+begin_src python
+import pandas as pd
+
+example = pd.DataFrame(
+    [
+        199,
+        200,
+        208,
+        210,
+        200,
+        207,
+        240,
+        269,
+        260,
+        263,
+    ]
+)
+
+return (example.rolling(window=3).sum().gt(
+    example.shift(1).rolling(window=3).sum())).sum()
+#+end_src
+
+#+RESULTS:
+: 0    5
+: dtype: int64
+
+** Real
+
+#+begin_src python
+import pandas as pd
+
+df = pd.read_csv("./part_2_input.txt", sep=r'\s{2,}', engine='python', header=None, names=['depth'])
+
+return (df.rolling(window=3).sum().gt(
+    df.shift(1).rolling(window=3).sum())).sum()
+#+end_src
+
+#+RESULTS:
+: depth    1516
+: dtype: int64
