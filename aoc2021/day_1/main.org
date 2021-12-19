@@ -20,7 +20,7 @@ example = pd.Series(
     ]
 )
 
-return (example.gt(example.shift(1)))
+return example.gt(example.shift(1))
 
 # main()
 #+end_src
@@ -45,7 +45,9 @@ dtype: bool
 #+begin_src python
 import pandas as pd
 
-df = pd.read_csv("./part_1_input.txt", sep=r'\s{2,}', engine='python', header=None, names=['depth'])
+df = pd.read_csv(
+    "./part_1_input.txt", sep=r"\s{2,}", engine="python", header=None, names=["depth"]
+)
 
 
 return df.gt(df.shift(1)).sum()
@@ -77,8 +79,9 @@ example = pd.DataFrame(
     ]
 )
 
-return (example.rolling(window=3).sum().gt(
-    example.shift(1).rolling(window=3).sum())).sum()
+return (
+    example.rolling(window=3).sum().gt(example.shift(1).rolling(window=3).sum())
+).sum()
 #+end_src
 
 #+RESULTS:
@@ -90,10 +93,11 @@ return (example.rolling(window=3).sum().gt(
 #+begin_src python
 import pandas as pd
 
-df = pd.read_csv("./part_2_input.txt", sep=r'\s{2,}', engine='python', header=None, names=['depth'])
+df = pd.read_csv(
+    "./part_2_input.txt", sep=r"\s{2,}", engine="python", header=None, names=["depth"]
+)
 
-return (df.rolling(window=3).sum().gt(
-    df.shift(1).rolling(window=3).sum())).sum()
+return (df.rolling(window=3).sum().gt(df.shift(1).rolling(window=3).sum())).sum()
 #+end_src
 
 #+RESULTS:
