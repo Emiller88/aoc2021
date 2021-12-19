@@ -1,0 +1,38 @@
+#+TITLE: Day 2
+
+* Part 1
+** Example
+
+#+begin_src python :results replace output :session day_2 :exports both
+import pandas as pd
+
+df = pd.DataFrame(
+    [
+        ["forward", 5],
+        ["down", 5],
+        ["forward", 8],
+        ["up", 3],
+        ["down", 8],
+        ["forward", 2],
+    ],
+    columns=["direction", "value"],
+)
+
+df.convert_dtypes()
+
+
+f = df["value"].where(df["direction"] == "forward").sum()
+print(f)
+
+up = df["value"].where(df["direction"] == "up").sum()
+down = df["value"].where(df["direction"] == "down").sum()
+depth = down - up
+print(depth)
+
+print(depth * f)
+#+end_src
+
+#+RESULTS:
+: 15.0
+: 10.0
+: 150.0
