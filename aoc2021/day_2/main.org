@@ -36,3 +36,42 @@ print(depth * f)
 : 15.0
 : 10.0
 : 150.0
+
+** Real
+
+#+begin_src python :results replace output :session day_2 :exports both
+import pandas as pd
+
+df = pd.read_csv(
+    "./part_1_input.txt",
+    sep=" ",
+    header=None,
+    names=["direction", "value"],
+)
+
+print(df.head())
+
+df.convert_dtypes()
+
+
+f = df["value"].where(df["direction"] == "forward").sum()
+print(f)
+
+up = df["value"].where(df["direction"] == "up").sum()
+down = df["value"].where(df["direction"] == "down").sum()
+depth = down - up
+print(depth)
+
+print(depth * f)
+#+end_src
+
+#+RESULTS:
+:   direction  value
+: 0   forward      9
+: 1   forward      7
+: 2   forward      4
+: 3      down      7
+: 4   forward      5
+: 2052.0
+: 1032.0
+: 2117664.0
