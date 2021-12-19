@@ -32,11 +32,6 @@ print(depth)
 print(depth * f)
 #+end_src
 
-#+RESULTS:
-: 15.0
-: 10.0
-: 150.0
-
 ** Real
 
 #+begin_src python :results replace output :session day_2 :exports both
@@ -75,3 +70,54 @@ print(depth * f)
 : 2052.0
 : 1032.0
 : 2117664.0
+
+
+* Part 2
+** Example
+
+#+begin_src python :results replace output :session day_2 :exports both
+import pandas as pd
+
+example = pd.DataFrame(
+    [
+        ["forward", 5],
+        ["down", 5],
+        ["forward", 8],
+        ["up", 3],
+        ["down", 8],
+        ["forward", 2],
+    ],
+    columns=["direction", "value"],
+)
+
+example.convert_dtypes()
+example["aim"] = 0
+
+
+def calc_aim(x: df):
+    if x["direction"] == "up":
+        print("up")
+        x["aim"] = x["aim"].shift() - x["value"]
+    elif x["direction"] == "down":
+        print("down")
+        x["aim"] = x["aim"].shift() + x["value"]
+    else:
+        print("forward")
+
+
+# print(example.apply(calc_aim, axis=1))
+
+
+f = example["value"].where(example["direction"] == "forward").sum()
+print(f)
+
+# up = example["value"].where(example["direction"] == "up").sum()
+# down = example["value"].where(example["direction"] == "down").sum()
+# depth = down - up
+# print(depth)
+
+# print(depth * f)
+#+end_src
+
+#+RESULTS:
+: 15.0
