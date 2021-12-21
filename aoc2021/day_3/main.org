@@ -58,3 +58,48 @@ print(gamma_decimal * epsilon_decimal)
 : 01001
 : 9
 : 198
+
+** Real
+
+#+begin_src python :results replace output :exports both
+import pandas as pd
+
+df = pd.read_csv(
+    "./part_1_input.txt",
+    # sep="\d",
+    dtype="str",
+    header=None,
+    names=["original"],
+)
+# print(df.head())
+df = df["original"].str.split("", expand=True)
+df.drop([0,13], axis=1, inplace=True)
+# print(df.head())
+
+df.convert_dtypes()
+
+
+gamma_df = df.apply(lambda x: x.value_counts().index[0])
+
+gamma_binary = gamma_df.to_string(index=False).replace("\n", "")
+print(gamma_binary)
+gamma_decimal = int(gamma_binary, 2)
+print(gamma_decimal)
+
+
+epsilon_df = df.apply(lambda x: x.value_counts().index[1])
+
+epsilon_binary = epsilon_df.to_string(index=False).replace("\n", "")
+print(epsilon_binary)
+epsilon_decimal = int(epsilon_binary, 2)
+print(epsilon_decimal)
+
+print(gamma_decimal * epsilon_decimal)
+#+end_src
+
+#+RESULTS:
+: 010010010110
+: 1174
+: 101101101001
+: 2921
+: 3429254
