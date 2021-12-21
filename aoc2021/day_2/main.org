@@ -13,8 +13,7 @@ df = pd.DataFrame(
         ["forward", 8],
         ["up", 3],
         ["down", 8],
-        ["forward", 2],
-    ],
+        ["forward", 2],],
     columns=["direction", "value"],
 )
 
@@ -129,4 +128,61 @@ forward
 4      down      8
 15.0
 900.0
+#+end_example
+
+** Real
+
+#+begin_src python :results replace output :session day_2 :exports both
+import pandas as pd
+
+df = pd.read_csv(
+    "./part_1_input.txt",
+    sep=" ",
+    header=None,
+    names=["direction", "value"],
+)
+
+print(df.head())
+
+df.convert_dtypes()
+
+aim = 0
+depth = 0
+for row in df.itertuples():
+    if row.direction == "forward":
+        depth = depth + aim * row.value
+    elif row.direction == "up":
+        aim = aim - row.value
+    elif row.direction == "down":
+        aim = aim + row.value
+
+print(df.head())
+
+horizontal = df["value"].where(df["direction"] == "forward").sum()
+print(horizontal)
+
+# up = df["value"].where(df["direction"] == "up").sum()
+# down = df["value"].where(df["direction"] == "down").sum()
+# depth = down - up
+# print(depth)
+
+print(depth * horizontal)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  direction  value
+0   forward      9
+1   forward      7
+2   forward      4
+3      down      7
+4   forward      5
+  direction  value
+0   forward      9
+1   forward      7
+2   forward      4
+3      down      7
+4   forward      5
+2052.0
+2073416724.0
 #+end_example
