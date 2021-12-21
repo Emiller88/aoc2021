@@ -75,6 +75,7 @@ print(depth * f)
 * Part 2
 ** Example
 
+
 #+begin_src python :results replace output :session day_2 :exports both
 import pandas as pd
 
@@ -91,33 +92,41 @@ example = pd.DataFrame(
 )
 
 example.convert_dtypes()
-example["aim"] = 0
 
 
-def calc_aim(x: df):
-    if x["direction"] == "up":
-        print("up")
-        x["aim"] = x["aim"].shift() - x["value"]
-    elif x["direction"] == "down":
-        print("down")
-        x["aim"] = x["aim"].shift() + x["value"]
-    else:
-        print("forward")
+aim = 0
+depth = 0
+for row in example.itertuples():
+    print(row.direction)
+    if row.direction == "forward":
+        depth = depth + aim * row.value
+    elif row.direction == "up":
+        aim = aim - row.value
+    elif row.direction == "down":
+        aim = aim + row.value
 
+print(example.head())
 
-# print(example.apply(calc_aim, axis=1))
+horizontal = example["value"].where(example["direction"] == "forward").sum()
+print(horizontal)
 
-
-f = example["value"].where(example["direction"] == "forward").sum()
-print(f)
-
-# up = example["value"].where(example["direction"] == "up").sum()
-# down = example["value"].where(example["direction"] == "down").sum()
-# depth = down - up
-# print(depth)
-
-# print(depth * f)
+print(depth * horizontal)
 #+end_src
 
 #+RESULTS:
-: 15.0
+#+begin_example
+forward
+down
+forward
+up
+down
+forward
+  direction  value
+0   forward      5
+1      down      5
+2   forward      8
+3        up      3
+4      down      8
+15.0
+900.0
+#+end_example
