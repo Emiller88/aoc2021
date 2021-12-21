@@ -1,0 +1,48 @@
+#+TITLE: Day 3
+
+* Part 1
+
+** Example
+
+#+begin_src python :results replace output :exports both
+import pandas as pd
+
+df = pd.DataFrame(
+    [
+        "00100",
+        "11110",
+        "10110",
+        "10111",
+        "10101",
+        "01111",
+        "00111",
+        "11100",
+        "10000",
+        "11001",
+        "00010",
+        "01010",
+    ],
+    columns=["original"],
+)
+df["col1"] = df["original"].str[0:1].astype(int)
+df["col2"] = df["original"].str[1:2].astype(int)
+df["col3"] = df["original"].str[2:3].astype(int)
+df["col4"] = df["original"].str[3:4].astype(int)
+df["col5"] = df["original"].str[4:5].astype(int)
+df.drop("original", axis=1, inplace=True)
+
+# df.convert_dtypes()
+
+
+gamma_df = df.apply(lambda x: x.value_counts().index[0])
+
+gamma_binary = gamma_df.to_string(index=False).replace("\n", "")
+# gamma_binary = gamma_binary +
+print(gamma_binary)
+gamma_decimal = int(gamma_binary, 2)
+print(gamma_decimal)
+#+end_src
+
+#+RESULTS:
+: 10110
+: 22
