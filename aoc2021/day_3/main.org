@@ -37,12 +37,24 @@ df.drop("original", axis=1, inplace=True)
 gamma_df = df.apply(lambda x: x.value_counts().index[0])
 
 gamma_binary = gamma_df.to_string(index=False).replace("\n", "")
-# gamma_binary = gamma_binary +
 print(gamma_binary)
 gamma_decimal = int(gamma_binary, 2)
 print(gamma_decimal)
+
+
+epsilon_df = df.apply(lambda x: x.value_counts().index[1])
+
+epsilon_binary = epsilon_df.to_string(index=False).replace("\n", "")
+print(epsilon_binary)
+epsilon_decimal = int(epsilon_binary, 2)
+print(epsilon_decimal)
+
+print(gamma_decimal * epsilon_decimal)
 #+end_src
 
 #+RESULTS:
 : 10110
 : 22
+: 01001
+: 9
+: 198
