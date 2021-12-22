@@ -153,14 +153,36 @@ for i in range(num_col):
     if len(df.index) == 1:
         ox_index = df.index
 
-# print(og_df.iloc[ox_index].to_string(header=False, index=False))
+print(og_df.iloc[ox_index].to_string(header=False, index=False))
 ox_binary = og_df.iloc[ox_index].to_string(header=False, index=False).replace(" ", "")
 ox_decimal = int(ox_binary, 2)
 print(ox_decimal)
 
 # CO2 scrubber rating
+df = og_df
+
+num_col = len(df.columns)
+co2_index = 0
+
+for i in range(num_col):
+    df = df.where(df.iloc[:, 0] == df.iloc[:, 0].value_counts(ascending=True).index[0]).dropna()
+    # print(df)
+    df.drop(columns=df.columns[0], axis=1, inplace=True)
+    if len(df.index) == 1:
+        co2_index = df.index
+        break
+
+print(og_df.iloc[co2_index].to_string(header=False, index=False))
+co2_binary = og_df.iloc[co2_index].to_string(header=False, index=False).replace(" ", "")
+co2_decimal = int(co2_binary, 2)
+print(co2_decimal)
+
+print(ox_decimal * co2_decimal)
 #+end_src
 
 #+RESULTS:
 : 1 0 1 1 0
 : 22
+: 0 1 1 1 1
+: 15
+: 330
