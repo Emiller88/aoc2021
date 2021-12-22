@@ -103,3 +103,64 @@ print(gamma_decimal * epsilon_decimal)
 : 101101101001
 : 2921
 : 3429254
+
+
+* Part 2
+
+** Example
+
+#+begin_src python :results replace output :exports both
+import pandas as pd
+
+df = pd.DataFrame(
+    [
+        "00100",
+        "11110",
+        "10110",
+        "10111",
+        "10101",
+        "01111",
+        "00111",
+        "11100",
+        "10000",
+        "11001",
+        "00010",
+        "01010",
+    ],
+    columns=["original"],
+)
+df["col1"] = df["original"].str[0:1].astype(int)
+df["col2"] = df["original"].str[1:2].astype(int)
+df["col3"] = df["original"].str[2:3].astype(int)
+df["col4"] = df["original"].str[3:4].astype(int)
+df["col5"] = df["original"].str[4:5].astype(int)
+df.drop("original", axis=1, inplace=True)
+
+# print(df)
+# df.convert_dtypes()
+
+# oxygen generator rating
+og_df = df
+
+# For columns in df
+num_col = len(df.columns)
+ox_index = 0
+
+for i in range(num_col):
+    df = df.where(df.iloc[:, 0] == df.iloc[:, 0].value_counts().index[0]).dropna()
+    # print(df)
+    df.drop(columns=df.columns[0], axis=1, inplace=True)
+    if len(df.index) == 1:
+        ox_index = df.index
+
+# print(og_df.iloc[ox_index].to_string(header=False, index=False))
+ox_binary = og_df.iloc[ox_index].to_string(header=False, index=False).replace(" ", "")
+ox_decimal = int(ox_binary, 2)
+print(ox_decimal)
+
+# CO2 scrubber rating
+#+end_src
+
+#+RESULTS:
+: 1 0 1 1 0
+: 22
