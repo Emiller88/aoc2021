@@ -152,6 +152,7 @@ for i in range(num_col):
     df.drop(columns=df.columns[0], axis=1, inplace=True)
     if len(df.index) == 1:
         ox_index = df.index
+        break
 
 print(og_df.iloc[ox_index].to_string(header=False, index=False))
 ox_binary = og_df.iloc[ox_index].to_string(header=False, index=False).replace(" ", "")
@@ -164,9 +165,10 @@ df = og_df
 num_col = len(df.columns)
 co2_index = 0
 
+print(df)
 for i in range(num_col):
     df = df.where(df.iloc[:, 0] == df.iloc[:, 0].value_counts(ascending=True).index[0]).dropna()
-    # print(df)
+    print(df)
     df.drop(columns=df.columns[0], axis=1, inplace=True)
     if len(df.index) == 1:
         co2_index = df.index
@@ -181,8 +183,139 @@ print(ox_decimal * co2_decimal)
 #+end_src
 
 #+RESULTS:
-: 1 0 1 1 0
-: 22
-: 0 1 1 1 1
-: 15
-: 330
+#+begin_example
+1 0 1 1 0
+22
+    col1  col2  col3  col4  col5
+0      0     0     1     0     0
+1      1     1     1     1     0
+2      1     0     1     1     0
+3      1     0     1     1     1
+4      1     0     1     0     1
+5      0     1     1     1     1
+6      0     0     1     1     1
+7      1     1     1     0     0
+8      1     0     0     0     0
+9      1     1     0     0     1
+10     0     0     0     1     0
+11     0     1     0     1     0
+    col1  col2  col3  col4  col5
+0    0.0   0.0   1.0   0.0   0.0
+5    0.0   1.0   1.0   1.0   1.0
+6    0.0   0.0   1.0   1.0   1.0
+10   0.0   0.0   0.0   1.0   0.0
+11   0.0   1.0   0.0   1.0   0.0
+    col2  col3  col4  col5
+5    1.0   1.0   1.0   1.0
+11   1.0   0.0   1.0   0.0
+   col3  col4  col5
+5   1.0   1.0   1.0
+0 1 1 1 1
+15
+330
+#+end_example
+
+** Real
+
+#+begin_src python :results replace output :exports both
+import pandas as pd
+
+df = pd.read_csv(
+    "./part_1_input.txt",
+    # sep="\d",
+    nrows=10,
+    dtype="str",
+    header=None,
+    names=["original"],
+)
+# print(df.head())
+df = df["original"].str.split("", expand=True)
+df.drop([0,13], axis=1, inplace=True)
+# print(df.head())
+
+df.convert_dtypes()
+print(df)
+
+# oxygen generator rating
+og_df = df
+
+# For columns in df
+num_col = len(df.columns)
+ox_index = 0
+
+for i in range(num_col):
+    df = df.where(df.iloc[:, 0] == df.iloc[:, 0].value_counts().index[0]).dropna()
+    # print(df)
+    df.drop(columns=df.columns[0], axis=1, inplace=True)
+    if len(df.index) == 1:
+        ox_index = df.index
+        break
+
+print(og_df.iloc[ox_index].to_string(header=False, index=False))
+ox_binary = og_df.iloc[ox_index].to_string(header=False, index=False).replace(" ", "")
+ox_decimal = int(ox_binary, 2)
+print(ox_decimal)
+
+# CO2 scrubber rating
+df = og_df
+
+num_col = len(df.columns)
+co2_index = 0
+
+print(df)
+for i in range(num_col):
+    df = df.where(df.iloc[:, 0] == df.iloc[:, 0].value_counts(ascending=True).index[0]).dropna()
+    print(df)
+    df.drop(columns=df.columns[0], axis=1, inplace=True)
+    if len(df.index) == 1:
+        co2_index = df.index
+        break
+
+print(og_df.iloc[co2_index].to_string(header=False, index=False))
+co2_binary = og_df.iloc[co2_index].to_string(header=False, index=False).replace(" ", "")
+co2_decimal = int(co2_binary, 2)
+print(co2_decimal)
+
+print(ox_decimal * co2_decimal)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  1  2  3  4  5  6  7  8  9  10 11 12
+0  0  0  0  1  1  0  0  0  0  0  0  1
+1  0  1  1  0  1  1  0  0  1  1  0  1
+2  0  0  1  1  0  1  1  0  0  1  1  1
+3  0  0  1  1  0  1  0  1  1  0  0  1
+4  1  1  0  1  1  1  0  1  1  1  0  1
+5  1  1  0  0  1  1  1  0  1  0  1  0
+6  1  1  1  1  0  1  0  1  0  0  0  1
+7  0  1  0  1  0  0  1  1  1  1  0  1
+8  0  1  1  0  0  0  0  1  1  0  0  0
+9  0  0  1  1  1  0  1  1  0  0  1  1
+0 0 1 1 0 1 1 0 0 1 1 1
+871
+  1  2  3  4  5  6  7  8  9  10 11 12
+0  0  0  0  1  1  0  0  0  0  0  0  1
+1  0  1  1  0  1  1  0  0  1  1  0  1
+2  0  0  1  1  0  1  1  0  0  1  1  1
+3  0  0  1  1  0  1  0  1  1  0  0  1
+4  1  1  0  1  1  1  0  1  1  1  0  1
+5  1  1  0  0  1  1  1  0  1  0  1  0
+6  1  1  1  1  0  1  0  1  0  0  0  1
+7  0  1  0  1  0  0  1  1  1  1  0  1
+8  0  1  1  0  0  0  0  1  1  0  0  0
+9  0  0  1  1  1  0  1  1  0  0  1  1
+  1  2  3  4  5  6  7  8  9  10 11 12
+4  1  1  0  1  1  1  0  1  1  1  0  1
+5  1  1  0  0  1  1  1  0  1  0  1  0
+6  1  1  1  1  0  1  0  1  0  0  0  1
+  2  3  4  5  6  7  8  9  10 11 12
+4  1  0  1  1  1  0  1  1  1  0  1
+5  1  0  0  1  1  1  0  1  0  1  0
+6  1  1  1  0  1  0  1  0  0  0  1
+  3  4  5  6  7  8  9  10 11 12
+6  1  1  0  1  0  1  0  0  0  1
+1 1 1 1 0 1 0 1 0 0 0 1
+3921
+3415191
+#+end_example
