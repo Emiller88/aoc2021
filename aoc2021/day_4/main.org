@@ -1,0 +1,51 @@
+#+TITLE: Day 4
+df_firstn = pd.read_csv(FILE_PATH, nrows=n)
+
+
+* Day 1
+** Example
+
+#+begin_src python :results replace output :exports both
+import pandas as pd
+
+
+draw_numbers = pd.read_csv(
+    "./demo.txt",
+    nrows=1,
+    header=None,
+    index_col=False,
+)
+# print(draw_numbers)
+# boards = pd.read_table(
+#     "./demo.txt",
+#     skiprows=2,
+#     chunksize=5
+# )
+
+with pd.read_csv("./demo.txt", skiprows=2, chunksize=5, header=None) as reader:
+    reader
+    for chunk in reader:
+        print(chunk)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                0
+0  22 13 17 11  0
+1   8  2 23  4 24
+2  21  9 14 16  7
+3   6 10  3 18  5
+4   1 12 20 15 19
+                0
+5   3 15  0  2 22
+6   9 18 13 17  5
+7  19  8  7 25 23
+8  20 11 10 24  4
+9  14 21 16 12  6
+                 0
+10  14 21 17 24  4
+11  10 16 15  9 19
+12  18  8 23 26 20
+13  22 11 13  6  5
+14   2  0 12  3  7
+#+end_example
